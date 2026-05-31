@@ -4,6 +4,8 @@ A serializable event binding system for Unity with multi-parameter support, flex
 
 Stop writing boilerplate UnityEvents and manually wiring up callbacks. ArgEvent lets you configure event listeners entirely in the Inspector — drag, drop, reorder, copy/paste, and source parameter values from constants, other components, or event arguments at runtime.
 
+![ArgEvent System preview](Assets/ArgEventGif01.gif)
+
 ## Features
 
 - **Serializable** — Works with Unity serialization, no runtime registration needed
