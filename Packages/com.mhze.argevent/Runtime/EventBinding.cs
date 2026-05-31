@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ArgEvent
 {
     [Serializable]
-    public class EventBinding
+    public class ArgEventBinding
     {
         [SerializeField] private List<Listener> _listeners = new List<Listener>();
 
@@ -58,7 +58,7 @@ namespace ArgEvent
     }
 
     [Serializable]
-    public class EventBinding<T> : EventBinding
+    public class ArgEventBinding<T> : ArgEventBinding
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Invoke(T arg)
@@ -71,7 +71,7 @@ namespace ArgEvent
     }
 
     [Serializable]
-    public class EventBinding<T1, T2> : EventBinding
+    public class ArgEventBinding<T1, T2> : ArgEventBinding
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Invoke(T1 arg1, T2 arg2)

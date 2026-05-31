@@ -11,8 +11,8 @@ using Object = UnityEngine.Object;
 
 namespace ArgEvent.Editor
 {
-    [CustomPropertyDrawer(typeof(EventBinding), true)]
-    public class EventBindingDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(ArgEventBinding), true)]
+    public class ArgEventBindingDrawer : PropertyDrawer
     {
         private Type[] _eventArgTypes = Array.Empty<Type>();
 
@@ -114,7 +114,7 @@ namespace ArgEvent.Editor
             if (fieldInfo != null && fieldInfo.FieldType.IsGenericType)
             {
                 var def = fieldInfo.FieldType.GetGenericTypeDefinition();
-                if (def == typeof(EventBinding<>) || def == typeof(EventBinding<,>))
+                if (def == typeof(ArgEventBinding<>) || def == typeof(ArgEventBinding<,>))
                 {
                     _eventArgTypes = fieldInfo.FieldType.GetGenericArguments();
                 }
