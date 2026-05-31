@@ -1,0 +1,16 @@
+{
+  "name": "com.mhze.argevent.Editor",
+  "rootNamespace": "ArgEvent.Editor",
+  "references": [
+    "com.mhze.argevent.Runtime",
+    "UnityEngine.UIElementsModule",
+    "UnityEditor.UIElementsModule"
+  ],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": []
+}

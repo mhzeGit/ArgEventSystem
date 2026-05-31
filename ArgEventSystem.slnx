@@ -1,2 +1,4 @@
 ﻿<Solution>
+  <Project Path="com.mhze.argevent.Runtime.csproj" />
+  <Project Path="com.mhze.argevent.Editor.csproj" />
 </Solution>

@@ -1,0 +1,12 @@
+{
+  "name": "com.mhze.argevent.Runtime",
+  "rootNamespace": "ArgEvent",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": []
+}
