@@ -33,14 +33,6 @@ Stop writing boilerplate UnityEvents and manually wiring up callbacks. ArgEvent 
 https://github.com/mhzeGit/ArgEventSystem.git?path=Packages/com.mhze.argevent
 ```
 
-### Via Packages/manifest.json
-
-Add the following line to the `dependencies` block:
-
-```json
-"com.mhze.argevent": "https://github.com/mhzeGit/ArgEventSystem.git?path=Packages/com.mhze.argevent"
-```
-
 ## Quick Start
 
 ```csharp
