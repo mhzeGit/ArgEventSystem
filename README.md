@@ -9,7 +9,7 @@ Stop writing boilerplate UnityEvents and manually wiring up callbacks. ArgEvent 
 ## Features
 
 - **Serializable** — Works with Unity serialization, no runtime registration needed
-- **Multi-parameter** — Supports 0, 1, and 2 generic type arguments with `ArgEventBinding`, `ArgEventBinding<T>`, `ArgEventBinding<T1, T2>`
+- **Multi-parameter** — Supports 0–8 generic type arguments with `ArgEventBinding` through `ArgEventBinding<T1…T8>`, or any number via the non-generic `ArgEventBinding.Invoke(object[])`
 - **Flexible argument sourcing** — each parameter can be:
   - **Constant** — a literal value (int, float, bool, Vector2/3/4, Color, string, enum, GameObject, Component, etc.)
   - **Script** — a public field or property from any other component on any GameObject
@@ -44,12 +44,15 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private ArgEventBinding _onDamageTaken;
     [SerializeField] private ArgEventBinding<DamageData> _onDamaged;
     [SerializeField] private ArgEventBinding<int, int> _onScoreChanged;
+    [SerializeField] private ArgEventBinding<string, float, GameObject, int> _onMultiParamEvent;
 
     private void Awake()
     {
         // Invoke from code — the Inspector-configured listeners handle the rest
         _onDamageTaken.Invoke();
         _onDamaged.Invoke(new DamageData { Amount = 10 });
+        _onScoreChanged.Invoke(100, 5);
+        _onMultiParamEvent.Invoke("headshot", 25.5f, target, 1);
     }
 }
 ```
@@ -60,9 +63,10 @@ In the Inspector, configure listeners by selecting a target GameObject, a script
 
 | Type | Description |
 |------|-------------|
-| `ArgEventBinding` | Holds a list of `Listener` objects. Call `Invoke()` to fire all listeners. |
-| `ArgEventBinding<T>` | Generic variant that passes an argument of type `T` to listeners. |
-| `ArgEventBinding<T1, T2>` | Generic variant that passes two arguments to listeners. |
+| `ArgEventBinding` | Base class. Holds a list of `Listener` objects. `Invoke()` fires zero-arg listeners; `Invoke(object[])` passes arbitrary arguments. |
+| `ArgEventBinding<T>` | Generic variant that passes one typed argument to listeners. |
+| `ArgEventBinding<T1, T2>` | Generic variant for two typed arguments. |
+| `ArgEventBinding<T1…T8>` | Typed variants for 3 through 8 arguments (same pattern). |
 | `Listener` | Binds a target component + method name. Resolves parameter values at runtime via reflection. |
 | `ParameterEntry` | Configures how a single method parameter is sourced (Constant, Script, or Event). |
 | `ArgumentSource` | Enum: `Constant`, `Script`, `Event` |
