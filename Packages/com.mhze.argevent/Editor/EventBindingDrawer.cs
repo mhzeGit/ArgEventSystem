@@ -114,7 +114,7 @@ namespace ArgEvent.Editor
             if (fieldInfo != null && fieldInfo.FieldType.IsGenericType)
             {
                 var def = fieldInfo.FieldType.GetGenericTypeDefinition();
-                if (def == typeof(ArgEventBinding<>) || def == typeof(ArgEventBinding<,>))
+                if (def.BaseType == typeof(ArgEventBinding))
                 {
                     _eventArgTypes = fieldInfo.FieldType.GetGenericArguments();
                 }
