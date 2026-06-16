@@ -289,9 +289,8 @@ namespace ArgEvent.Editor
             {
                 if (!evt.ctrlKey && !evt.commandKey) return;
 
-                if (evt.target is TextField || evt.target is IntegerField ||
-                    evt.target is FloatField || evt.target is DoubleField ||
-                    evt.target is LongField || evt.target is ObjectField)
+                var targetElement = evt.target as VisualElement;
+                if (targetElement != null && IsInsideTextInput(targetElement))
                     return;
 
                 if (evt.keyCode == KeyCode.C && hoveredCardIdx >= 0)
@@ -1599,6 +1598,19 @@ namespace ArgEvent.Editor
             pp.FindPropertyRelative("_boundsValue").boundsValue = new Bounds(Vector3.zero, Vector3.one);
             pp.FindPropertyRelative("_layerMaskValue").intValue = 0;
             pp.FindPropertyRelative("_objectValue").objectReferenceValue = null;
+        }
+
+        private static bool IsInsideTextInput(VisualElement element)
+        {
+            while (element != null)
+            {
+                if (element is TextField || element is IntegerField ||
+                    element is FloatField || element is DoubleField ||
+                    element is LongField || element is ObjectField)
+                    return true;
+                element = element.parent;
+            }
+            return false;
         }
 
         private static Type ResolveType(string typeName)
