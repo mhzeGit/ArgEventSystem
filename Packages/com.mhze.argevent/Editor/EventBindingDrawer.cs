@@ -22,8 +22,13 @@ namespace ArgEvent.Editor
         private class CopiedListenerData
         {
             public bool enabled;
+#if UNITY_6000_0_OR_NEWER
+            public ulong targetInstanceId;
+            public ulong gameObjectInstanceId;
+#else
             public int targetInstanceId;
             public int gameObjectInstanceId;
+#endif
             public string methodName;
             public string methodDisplayName;
             public string customLabel;
@@ -36,7 +41,11 @@ namespace ArgEvent.Editor
             public string parameterName;
             public string parameterTypeName;
             public int source;
+#if UNITY_6000_0_OR_NEWER
+            public ulong sourceComponentInstanceId;
+#else
             public int sourceComponentInstanceId;
+#endif
             public string sourceMemberName;
             public string eventVariableName;
             public int eventArgIndex;
@@ -55,7 +64,11 @@ namespace ArgEvent.Editor
             public AnimationCurve curveValue;
             public Gradient gradientValue;
             public int layerMaskValue;
+#if UNITY_6000_0_OR_NEWER
+            public ulong objectInstanceId;
+#else
             public int objectInstanceId;
+#endif
         }
         private static readonly string[] UnitySpecialMethods =
         {
@@ -1275,9 +1288,17 @@ namespace ArgEvent.Editor
             var data = new CopiedListenerData();
             data.enabled = lp.FindPropertyRelative("_enabled").boolValue;
             var target = lp.FindPropertyRelative("_target").objectReferenceValue as Component;
+#if UNITY_6000_0_OR_NEWER
+            data.targetInstanceId = target != null ? EntityId.ToULong(target.GetEntityId()) : 0;
+#else
             data.targetInstanceId = target != null ? target.GetInstanceID() : 0;
+#endif
             var go = lp.FindPropertyRelative("_gameObject").objectReferenceValue as GameObject;
+#if UNITY_6000_0_OR_NEWER
+            data.gameObjectInstanceId = go != null ? EntityId.ToULong(go.GetEntityId()) : 0;
+#else
             data.gameObjectInstanceId = go != null ? go.GetInstanceID() : 0;
+#endif
             data.methodName = lp.FindPropertyRelative("_methodName").stringValue;
             data.methodDisplayName = lp.FindPropertyRelative("_methodDisplayName").stringValue;
             data.customLabel = lp.FindPropertyRelative("_customLabel").stringValue;
@@ -1291,7 +1312,11 @@ namespace ArgEvent.Editor
                 pd.parameterTypeName = pp.FindPropertyRelative("_parameterTypeName").stringValue;
                 pd.source = pp.FindPropertyRelative("_source").enumValueIndex;
                 var sc = pp.FindPropertyRelative("_sourceComponent").objectReferenceValue as Component;
+#if UNITY_6000_0_OR_NEWER
+                pd.sourceComponentInstanceId = sc != null ? EntityId.ToULong(sc.GetEntityId()) : 0;
+#else
                 pd.sourceComponentInstanceId = sc != null ? sc.GetInstanceID() : 0;
+#endif
                 pd.sourceMemberName = pp.FindPropertyRelative("_sourceMemberName").stringValue;
                 pd.eventVariableName = pp.FindPropertyRelative("_eventVariableName").stringValue;
                 pd.eventArgIndex = pp.FindPropertyRelative("_eventArgIndex").intValue;
@@ -1311,7 +1336,11 @@ namespace ArgEvent.Editor
                 pd.gradientValue = pp.FindPropertyRelative("_gradientValue").gradientValue;
                 pd.layerMaskValue = pp.FindPropertyRelative("_layerMaskValue").intValue;
                 var obj = pp.FindPropertyRelative("_objectValue").objectReferenceValue;
+#if UNITY_6000_0_OR_NEWER
+                pd.objectInstanceId = obj != null ? EntityId.ToULong(obj.GetEntityId()) : 0;
+#else
                 pd.objectInstanceId = obj != null ? obj.GetInstanceID() : 0;
+#endif
                 data.parameters.Add(pd);
             }
 
@@ -1327,9 +1356,17 @@ namespace ArgEvent.Editor
 
             lp.FindPropertyRelative("_enabled").boolValue = data.enabled;
             lp.FindPropertyRelative("_target").objectReferenceValue =
+#if UNITY_6000_0_OR_NEWER
+                EditorUtility.EntityIdToObject(EntityId.FromULong(data.targetInstanceId)) as Component;
+#else
                 EditorUtility.InstanceIDToObject(data.targetInstanceId) as Component;
+#endif
             lp.FindPropertyRelative("_gameObject").objectReferenceValue =
+#if UNITY_6000_0_OR_NEWER
+                EditorUtility.EntityIdToObject(EntityId.FromULong(data.gameObjectInstanceId)) as GameObject;
+#else
                 EditorUtility.InstanceIDToObject(data.gameObjectInstanceId) as GameObject;
+#endif
             lp.FindPropertyRelative("_methodName").stringValue = data.methodName;
             lp.FindPropertyRelative("_methodDisplayName").stringValue = data.methodDisplayName;
             lp.FindPropertyRelative("_customLabel").stringValue = data.customLabel;
@@ -1345,7 +1382,11 @@ namespace ArgEvent.Editor
                 pp.FindPropertyRelative("_parameterTypeName").stringValue = pd.parameterTypeName;
                 pp.FindPropertyRelative("_source").enumValueIndex = pd.source;
                 pp.FindPropertyRelative("_sourceComponent").objectReferenceValue =
+#if UNITY_6000_0_OR_NEWER
+                    EditorUtility.EntityIdToObject(EntityId.FromULong(pd.sourceComponentInstanceId)) as Component;
+#else
                     EditorUtility.InstanceIDToObject(pd.sourceComponentInstanceId) as Component;
+#endif
                 pp.FindPropertyRelative("_sourceMemberName").stringValue = pd.sourceMemberName;
                 pp.FindPropertyRelative("_eventVariableName").stringValue = pd.eventVariableName;
                 pp.FindPropertyRelative("_eventArgIndex").intValue = pd.eventArgIndex;
@@ -1365,7 +1406,11 @@ namespace ArgEvent.Editor
                 pp.FindPropertyRelative("_gradientValue").gradientValue = pd.gradientValue;
                 pp.FindPropertyRelative("_layerMaskValue").intValue = pd.layerMaskValue;
                 pp.FindPropertyRelative("_objectValue").objectReferenceValue =
+#if UNITY_6000_0_OR_NEWER
+                    EditorUtility.EntityIdToObject(EntityId.FromULong(pd.objectInstanceId));
+#else
                     EditorUtility.InstanceIDToObject(pd.objectInstanceId);
+#endif
             }
 
             lp.serializedObject.ApplyModifiedProperties();
