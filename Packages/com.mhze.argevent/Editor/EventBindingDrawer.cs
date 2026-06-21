@@ -503,17 +503,26 @@ namespace ArgEvent.Editor
             Component ct = targetProp.objectReferenceValue as Component;
             var go = ct != null ? ct.gameObject : goProp.objectReferenceValue as GameObject;
 
-            var goField = new ObjectField { objectType = typeof(GameObject), value = go };
+            var goField = new ObjectField { objectType = typeof(Object), value = go };
             goField.RegisterValueChangedCallback(evt =>
             {
-                var newGO = evt.newValue as GameObject;
-                goProp.objectReferenceValue = newGO;
-                targetProp.objectReferenceValue = null;
-                if (newGO != null && ct != null)
+                var comp = evt.newValue as Component;
+                if (comp != null)
                 {
-                    var same = newGO.GetComponent(ct.GetType());
-                    if (same != null)
-                        targetProp.objectReferenceValue = same;
+                    goProp.objectReferenceValue = comp.gameObject;
+                    targetProp.objectReferenceValue = comp;
+                }
+                else
+                {
+                    var newGO = evt.newValue as GameObject;
+                    goProp.objectReferenceValue = newGO;
+                    targetProp.objectReferenceValue = null;
+                    if (newGO != null && ct != null)
+                    {
+                        var same = newGO.GetComponent(ct.GetType());
+                        if (same != null)
+                            targetProp.objectReferenceValue = same;
+                    }
                 }
                 ClearMethod(methodNameProp, methodDisplayProp, paramsProp);
                 targetProp.serializedObject.ApplyModifiedProperties();
@@ -558,9 +567,24 @@ namespace ArgEvent.Editor
             }
             else
             {
+                var typeCount = new Dictionary<string, int>();
+                foreach (var c in comps)
+                {
+                    var tn = c.GetType().Name;
+                    typeCount[tn] = typeCount.TryGetValue(tn, out var n) ? n + 1 : 1;
+                }
+
+                var seen = new Dictionary<string, int>();
                 for (int i = 0; i < comps.Count; i++)
                 {
-                    choices.Add(comps[i].GetType().Name);
+                    var typeName = comps[i].GetType().Name;
+                    seen.TryGetValue(typeName, out var sofar);
+                    seen[typeName] = sofar + 1;
+
+                    choices.Add(typeCount[typeName] > 1
+                        ? $"{typeName} ({sofar})"
+                        : typeName);
+
                     if (comps[i] == currentTarget)
                         idx = i;
                 }
