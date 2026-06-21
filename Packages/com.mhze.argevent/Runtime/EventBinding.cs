@@ -9,6 +9,7 @@ namespace ArgEvent
     public class ArgEventBinding
     {
         [SerializeField] private List<Listener> _listeners = new List<Listener>();
+        [SerializeField] private bool _editorFoldout;
 
         public int ListenerCount => _listeners.Count;
 

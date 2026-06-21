@@ -171,7 +171,7 @@ namespace ArgEvent.Editor
             footerBtn.AddToClassList("add-listener-footer");
             root.Add(footerBtn);
 
-            bool expanded = false;
+            var foldoutProp = property.FindPropertyRelative("_editorFoldout");
 
             // Drag state
             VisualElement dragDropIndicator = null;
@@ -184,15 +184,16 @@ namespace ArgEvent.Editor
 
             void SetExpanded(bool val)
             {
-                expanded = val;
-                arrow.text = expanded ? "\u25BC" : "\u25B6";
-                content.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
-                footerBtn.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
+                foldoutProp.boolValue = val;
+                so.ApplyModifiedProperties();
+                arrow.text = val ? "\u25BC" : "\u25B6";
+                content.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+                footerBtn.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
-            arrow.RegisterCallback<PointerDownEvent>(_ => SetExpanded(!expanded));
-            title.RegisterCallback<PointerDownEvent>(_ => SetExpanded(!expanded));
-            SetExpanded(false);
+            arrow.RegisterCallback<PointerDownEvent>(_ => SetExpanded(!foldoutProp.boolValue));
+            title.RegisterCallback<PointerDownEvent>(_ => SetExpanded(!foldoutProp.boolValue));
+            SetExpanded(foldoutProp.boolValue);
 
             void RebuildNow()
             {
@@ -241,7 +242,7 @@ namespace ArgEvent.Editor
             void AddNewAndRebuild()
             {
                 AddNewListener(listenersProp);
-                if (!expanded) SetExpanded(true);
+                if (!foldoutProp.boolValue) SetExpanded(true);
                 RebuildNow();
             }
 
@@ -258,7 +259,7 @@ namespace ArgEvent.Editor
                         if (string.IsNullOrEmpty(_copiedListenerJson)) return;
                         int idx = listenersProp.arraySize;
                         AddNewListener(listenersProp);
-                        if (!expanded) SetExpanded(true);
+                        if (!foldoutProp.boolValue) SetExpanded(true);
                         PasteClipboardToListener(listenersProp.GetArrayElementAtIndex(idx));
                         RebuildNow();
                     });
@@ -325,7 +326,7 @@ namespace ArgEvent.Editor
                     {
                         int idx = listenersProp.arraySize;
                         AddNewListener(listenersProp);
-                        if (!expanded) SetExpanded(true);
+                        if (!foldoutProp.boolValue) SetExpanded(true);
                         PasteClipboardToListener(listenersProp.GetArrayElementAtIndex(idx));
                         RebuildNow();
                         evt.StopPropagation();
