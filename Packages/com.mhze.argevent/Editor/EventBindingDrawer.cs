@@ -12,6 +12,14 @@ using Object = UnityEngine.Object;
 namespace ArgEvent.Editor
 {
     [CustomPropertyDrawer(typeof(ArgEventBinding), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,,,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,,,,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,,,,,>), true)]
+    [CustomPropertyDrawer(typeof(ArgEventBinding<,,,,,,,>), true)]
     public class ArgEventBindingDrawer : PropertyDrawer
     {
         private Type[] _eventArgTypes = Array.Empty<Type>();
