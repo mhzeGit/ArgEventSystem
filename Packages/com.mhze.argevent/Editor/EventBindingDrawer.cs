@@ -1601,9 +1601,7 @@ namespace ArgEvent.Editor
                 bool matched = TryMatchEventVariable(pars[i].ParameterType, eventArgTypes,
                     out int matchedIdx, out string matchedVar);
 
-                pp.FindPropertyRelative("_source").enumValueIndex = matched
-                    ? (int)ArgumentSource.Event
-                    : (int)ArgumentSource.Constant;
+                pp.FindPropertyRelative("_source").enumValueIndex = (int)ArgumentSource.Constant;
                 pp.FindPropertyRelative("_eventArgIndex").intValue = matched ? matchedIdx : 0;
                 pp.FindPropertyRelative("_eventVariableName").stringValue = matchedVar ?? "";
             }
